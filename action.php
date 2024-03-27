@@ -1,6 +1,6 @@
 <?php
 
-if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['submit'])){
+if($_SERVER['REQUEST_METHOD']=='POST'){
 
     require __DIR__ ."/config/conn.php";
     $firstName = $_POST['first_name'];
@@ -14,9 +14,7 @@ if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['submit'])){
     $targetFile = $targetDirectory . basename($profileImage);
 
     // Move uploaded file to target directory
-    if (move_uploaded_file($_FILES["uploadFile"]["tmp_name"], $targetFile)) {
-        echo json_encode(Array("data"=>"The file ". basename( $_FILES["uploadFile"]["name"]). " has been uploaded."));
-    } else {
+    if (!move_uploaded_file($_FILES["uploadFile"]["tmp_name"], $targetFile)) {
         echo json_encode(Array("data"=>"Sorry, there was an error uploading your file."));
     }
 
@@ -24,7 +22,7 @@ if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['submit'])){
             VALUES ('$firstName', '$lastName', '$email', '$password', '$profileImage')";
 
     if ($conn->query($sql) === TRUE) {
-        echo json_encode(Array("Array"=>"Sorry, there was an error uploading your file."));
+        echo json_encode(Array("data"=>"Your data has been uploaded"));
     } else {
         echo json_encode(Array("data"=>"Error: " . $sql . "<br>" . $conn->error));
     }

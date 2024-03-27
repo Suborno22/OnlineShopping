@@ -7,7 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
-    <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" id="form">
         <h1>Register user</h1>
         <label for="first_name">First Name</label>
         <input type="text" name="first_name" id="first_name">
@@ -36,46 +36,28 @@
         <input type="submit" id="submit" name="submit" value="register">
     </form>
     <script>
-        // $(document).ready(()=>{
-        //     $("form").on('#submit',()=>{
-        //         var formData = new FormData(this);
-        //         console.log(this)
-        //         return false;
-        //     })
-        // })
+        $(document).ready(()=>{
+            $("#form").on('submit',(e)=>{
+                e.preventDefault();
+                var regForm = $('#form')[0];
+                var formData = new FormData(regForm);
+                formData.delete('cpassword');
+
+                for( var [key,value] of formData.entries()){
+                    console.log(key,"=>",value)
+                }
+                $.ajax({
+                    type:"POST",
+                    url:'action.php',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success:(res)=>{
+                        console.log(res)
+                    }
+                })
+            })
+        })
     </script>
 </body>
 </html>
-<?php
-
-if($_SERVER['REQUEST_METHOD']=='POST'){
-
-    require __DIR__ ."/config/conn.php";
-    $firstName = $_POST['first_name'];
-    $lastName = $_POST['last_name'];
-    $email = $_POST['email'];
-    $password = password_hash($_POST['password'],PASSWORD_DEFAULT);
-
-    // File upload handling
-    $targetDirectory = "uploads/"; // Change this to your desired directory
-    $profileImage = $_FILES['uploadFile']['name'];
-    $targetFile = $targetDirectory . basename($profileImage);
-
-    // Move uploaded file to target directory
-    if (move_uploaded_file($_FILES["uploadFile"]["tmp_name"], $targetFile)) {
-        echo json_encode(Array("data"=>"The file ". basename( $_FILES["uploadFile"]["name"]). " has been uploaded."));
-    } else {
-        echo json_encode(Array("data"=>"Sorry, there was an error uploading your file."));
-    }
-
-    $sql = "INSERT INTO `user_table` (first_name, last_name, email, password, profile_image) 
-            VALUES ('$firstName', '$lastName', '$email', '$password', '$profileImage')";
-
-    if ($conn->query($sql) === TRUE) {
-        echo json_encode(Array("Array"=>"Sorry, there was an error uploading your file."));
-    } else {
-        echo json_encode(Array("data"=>"Error: " . $sql . "<br>" . $conn->error));
-    }
-    $conn->close();
-}
-?>
