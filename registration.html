@@ -34,26 +34,36 @@
         <br><br>
 
         <input type="submit" id="submit" name="submit" value="register">
+        <div id="response"></div>
     </form>
     <script>
         $(document).ready(()=>{
             $("#form").on('submit',(e)=>{
                 e.preventDefault();
-                var regForm = $('#form')[0];
-                var formData = new FormData(regForm);
-                formData.delete('cpassword');
+                var formData = new FormData($('#form')[0]);
+                formData.append('submit',$('#submit').val());
+                // formData.delete('cpassword');
 
-                for( var [key,value] of formData.entries()){
-                    console.log(key,"=>",value)
-                }
+                // for( var [key,value] of formData.entries()){
+                //     console.log(key,"=>",value)
+                // }
                 $.ajax({
                     type:"POST",
                     url:'action.php',
                     data: formData,
+                    dataType: 'json',
                     processData: false,
                     contentType: false,
                     success:(res)=>{
-                        console.log(res)
+                        $("#response").html(res.data);
+                    },
+                    error: 
+                    (jqXHR,error, errorThrown)=>{  
+                        if(jqXHR.status&&jqXHR.status==400){
+                                alert(jqXHR.responseText); 
+                        }else{
+                            alert("Something went wrong:",error,errorThrown);
+                        }
                     }
                 })
             })

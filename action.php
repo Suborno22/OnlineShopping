@@ -1,6 +1,6 @@
 <?php
 
-if($_SERVER['REQUEST_METHOD']=='POST'){
+if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['submit'])){
 
     require __DIR__ ."/config/conn.php";
     $firstName = $_POST['first_name'];
@@ -9,7 +9,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     $password = password_hash($_POST['password'],PASSWORD_DEFAULT);
 
     // File upload handling
-    $targetDirectory = "uploads/"; // Change this to your desired directory
+    $targetDirectory = "uploads/"; 
     $profileImage = $_FILES['uploadFile']['name'];
     $targetFile = $targetDirectory . basename($profileImage);
 
