@@ -37,7 +37,7 @@
         <div id="response"></div>
     </form>
     <script>
-        $(document).ready(()=>{
+        $(()=>{
             $("#form").on('submit',(e)=>{
                 e.preventDefault();
                 var formData = new FormData($('#form')[0]);
@@ -49,7 +49,7 @@
                 // }
                 $.ajax({
                     type:"POST",
-                    url:'action.php',
+                    url:'registration.php',
                     data: formData,
                     dataType: 'json',
                     processData: false,
