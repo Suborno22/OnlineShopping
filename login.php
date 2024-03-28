@@ -1,33 +1,56 @@
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
-    require_once __DIR__ . "/config/conn.php";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <form id="form" method="post">
 
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+        <label for="email">Email</label><div id="available"></div><br>
+        <input type="email" id="email" name="email">
+        <br><br>
 
-    // Sanitize the email input
-    $email = $conn->real_escape_string($email);
+        <label for="password">Password</label><div id="validate"></div><br>
+        <input type="text" id="password" name="password">
+        <br><br>
 
-    $checkDb = "SELECT * FROM `user_table` WHERE email = '$email'";
-    $result = $conn->query($checkDb);
+        <input type="submit" name="submit" id="submit">
+        <div id="response"></div>
+    </form>
+    <script>
+        $(()=>[
+            $('#form').on('submit',(e)=>{
+                e.preventDefault();
+                var formData = new FormData($('#form')[0]);
+                formData.append('submit','something else');
 
-    if ($result) {
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            // Verify password
-            if (password_verify($password, $row['password'])) {
-                echo json_encode(Array("data" => "You are logged in"));
-            } else {
-                echo json_encode(Array("pwd" => "Incorrect password"));
-            }
-        } else {
-            echo json_encode(Array('check' => 'User does not exist'));
-        }
-    } else {
-        echo json_encode(Array('data' => 'Error in database query'));
-    }
-
-    // Close the database connection
-    $conn->close();
-}
-?>
+                $.ajax({
+                    type: 'post',
+                    url:'action/login.php',
+                    data: formData,
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    success:
+                    (res)=>{
+                        $("#response").html(res.data);
+                        $('#available').html(res.check);
+                        $('#validate').html(res.pwd);
+                    },
+                    error: 
+                    (jqXHR,error, errorThrown)=>{  
+                        if(jqXHR.status&&jqXHR.status==400){
+                                alert(jqXHR.responseText); 
+                        }else{
+                            alert("Something went wrong:",error,errorThrown);
+                        }
+                    }
+                })
+            })
+        ])
+    </script>
+</body>
+</html>
