@@ -46,7 +46,7 @@
             }
         } else {?>
             <tr>
-                <td colspan="6" style="text-align: center;">Empty field!</td>            
+                <td colspan="6" style="text-align: center;" id="empty"></td>            
             </tr>
         <?php
         }
@@ -85,6 +85,9 @@
                     dataType: 'json',
                     success: function(res) { 
                         $(deleteId).remove();
+                        if ($('#customer-table tbody tr').length === 0) {
+                            $('#empty').html('Empty Field!');
+                        }
                     },
                     
                 });
