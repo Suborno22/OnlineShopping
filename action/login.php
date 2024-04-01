@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Sanitize the email input
+
     $email = $conn->real_escape_string($email);
 
     $checkDb = "SELECT * FROM `user_table` WHERE email = '$email'";

@@ -63,7 +63,8 @@
                     url: 'update.php',
                     method: 'GET', 
                     data: { id: userId },
-                    success: function(response) { 
+                    dataType:'json',
+                    success: function(res) { 
                         window.location.href = 'update.php?id=' + userId;
                     },
                     error: function(jqXHR, textStatus, errorThrown) {

@@ -17,11 +17,18 @@
         <input type="text" id="password" name="password">
         <br><br>
 
+        <a href="forget_password.php" id="forgot_password"></a>
+        <br><br>
+
         <input type="submit" name="submit" id="submit">
         <div id="response"></div>
     </form>
     <script>
-        $(()=>[
+        $(document).ready(()=>{
+            $('#forgot_password').html('Forgot password?')
+            $('#forgot_password').css('color','red');
+
+
             $('#form').on('submit',(e)=>{
                 e.preventDefault();
                 var formData = new FormData($('#form')[0]);
@@ -50,7 +57,7 @@
                     }
                 })
             })
-        ])
+        }) 
     </script>
 </body>
 </html>

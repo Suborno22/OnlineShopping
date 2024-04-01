@@ -1,6 +1,6 @@
 <?php
 
-	$conn = mysqli_connect("localhost","root","password");
+	$conn = mysqli_connect("localhost","root","admin#123");
 
 	if(!$conn){
 
@@ -8,7 +8,9 @@
 		
 	}
 
-	$db_selected = mysqli_select_db($conn, "OnlineShopping");
+	$dbName = "onlineShopping";
+
+	$db_selected = mysqli_select_db($conn, $dbName);
 
 	if(!$db_selected){
 		die('Cannot use this db: '.mysqli_error($conn));

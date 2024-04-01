@@ -1,0 +1,17 @@
+{
+    "name": "dapl-asset-64/online_shopping",
+    "autoload": {
+        "psr-4": {
+            "DaplAsset64\\OnlineShopping\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "suborno22",
+            "email": "dsuborno0@gmail.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.9"
+    }
+}
