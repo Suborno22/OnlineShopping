@@ -20,6 +20,7 @@
         <th>Last Name</th>
         <th>Email</th>
         <th>Profile Image</th>
+        <th>Role</th>
         <th>Action</th>
     </tr>
     <?php
@@ -34,6 +35,7 @@
                     <td>
                         <img src="http://localhost/online_shopping/uploads/<?php echo $row['profile_image']; ?>" width="100" height="auto">
                     </td>
+                    <td><?php echo $row["role"]; ?></td>
                     <td>
                         <div class="actions">  
                             <a href="#" class="update-link" data-user-id="<?php echo $row['id']; ?>">Update</a>

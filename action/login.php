@@ -16,7 +16,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
             $row = $result->fetch_assoc();
             // Verify password
             if (password_verify($password, $row['password'])) {
-                echo json_encode(Array("data" => "You are logged in"));
+                if($row['role']=="Admin"){
+                    $email = $row['email'];
+                    echo json_encode(Array("success"=>"Admin","email"=>$email));
+                }
+                // echo json_encode(Array("data" => "You are logged in"));
             } else {
                 echo json_encode(Array("pwd" => "Incorrect password"));
             }

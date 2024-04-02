@@ -7,15 +7,16 @@
     <title>Change Password</title>
 </head>
 <body>
-    <form action="post" id="form">
+    <h2>Change Password</h2>
+    <form method="post" id="form" action="">
         <label for="new-password">New Password</label>
         <input type="password" id="new-password" name="new-password" placeholder="New Password">
         <div class="alert"></div>
         <br><br>
-
         <label for="confirm-password">Confirm Password</label>
         <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password">
-        <div class="alert"></div>  <input type="submit" name="submit" id="submit" value="Change Password">
+        <div class="alert"></div>  
+        <input type="submit" name="submit" id="submit" value="Change Password">
         <br><br>
     </form>
     <script>
@@ -25,11 +26,9 @@
                     $(alert).html("Passwords do not match");
                     $(alert).css("color",'red');
                     return false;
-                    
                 } else {
                     $(alert).html("");
                     return true; 
-                    
                 }
             }
             $('#new-password, #confirm-password').on('keyup', function() {
@@ -39,5 +38,29 @@
             });
         });
     </script>
+
+    <?php
+    if ($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST['submit'])) {
+        require __DIR__."/config/conn.php";
+
+        $password = $_POST['confirm-password'];
+        $email = $_GET['email'];
+
+        $DeleteToken = "DELETE FROM `recover_password` WHERE `recover_password`.`email` = '$email'";
+        $conn->query($DeleteToken);
+        $New_password = password_hash($password, PASSWORD_DEFAULT);
+
+        $stmt = $conn->prepare("UPDATE `user_table` SET `password` = ? WHERE `email` = ?");
+        $stmt->bind_param("ss", $New_password, $email);
+        if ($stmt->execute()) {
+            echo "Your password has changed";
+        } else {
+            echo "Error updating password: " . $conn->error;
+        }
+        $stmt->close();
+        $conn->close();
+    }
+    ?>
+
 </body>
 </html>

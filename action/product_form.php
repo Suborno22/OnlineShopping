@@ -3,13 +3,12 @@
 if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['submit'])){
 
     require __DIR__ ."/../config/conn.php";
-    $firstName = $_POST['first_name'];
-    $lastName = $_POST['last_name'];
-    $email = $_POST['email'];
-    $password = password_hash($_POST['password'],PASSWORD_DEFAULT);
+    $firstName = $_POST['product_name'];
+    $lastName = $_POST['product_stock'];
+    $email = $_POST['product_price'];
 
     // File upload handling
-    $targetDirectory = "uploads/"; 
+    $targetDirectory = "product_uploads/"; 
     $profileImage = $_FILES['uploadFile']['name'];
     $targetFile = "../".$targetDirectory . basename($profileImage);
 

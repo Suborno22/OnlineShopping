@@ -35,7 +35,7 @@
                 }
                 $.ajax({
                     type:'post',
-                    url: 'action/forget_pwd.php',
+                    url: 'action/forget_password.php',
                     data: formData,
                     dataType: 'json',
                     processData: false,
