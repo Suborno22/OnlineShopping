@@ -9,6 +9,8 @@
 <body>
     <form method="POST" enctype="multipart/form-data" id="form">
         <h1>Product Form</h1>
+
+
         <label for="product_name">Product Name</label>
         <input type="text" name="product_name" id="product_name">
         <br><br>
@@ -22,46 +24,44 @@
         <br><br>
 
         <label for="uploadFile">Upload your product photo</label>
-        <br>
         <input type='file' name='uploadFile' multiple>
         <br><br>
 
-        <div id= "upload_image">
+        <button id="uploadMultipleImageField" type="button">Upload another Image?</button><span> <----- Click here</span>
+        <br><br>
 
-        <!-- <div id = "add_file-0">
-            <input type="file" id="myfile" name="multiple_product_file[]"></br></br>
-        </div> -->
-    
-        <button name="add" id= "add_btn">Add more Product Images</button>
+        <div id="AllocateImages"></div>
 
-        <div id="response"></div>
         <input type="submit" id="submit" name="submit" value="register">
+         
+        <div id="response"></div>
+        <div id="id"></div>
         
     </form>
     <script>
-        $(()=>{
-            let div_id = 2;
-            $('#add_btn').on('click',()=>{
-                const newField = '<div id = "add_file-'+div_id+'"><input type="file" id="myfile" name="multiple_product_file[]"><input type="button" name="remove" class="remove" btn_id="add_file-'+div_id+'"value="Remove this Product image"/></br></br></div>';
-                $('#upload_image').append(newField); 
-                div_id++;
-            })
+        $(document).ready(function() {
+            let i = 0;
+            $('#uploadMultipleImageField').on('click', () => {
+                var insertImage = "<div id='imageField-" + i + "'><label for='insertImage-" + i + "'>Image: </label><input type='file' name='multiple_product_file[]' id='insertImage'>&nbsp;<button id='removeImage-" + i + "' class='removeImage'>Remove</button><br><br></div>";
+                console.log(i);
+                $('#AllocateImages').append(insertImage);
+                i++;
+            });
 
-            $('.remove').on("click",()=>{
-                let btn_id = "#"+$(this).attr('btn_id');
-                console.log(this);
-                $(btn_id).remove();
-            })
-            
-            $("#form").on('submit',(e)=>{
+            $('#AllocateImages').on('mousedown', '.removeImage', function() {
+                // console.log("removed:",i)
+                $(this).closest('div').remove();
+                i--;
+            });
+
+            $("#form").on('submit', (e) => {
                 e.preventDefault();
                 var formData = new FormData($('#form')[0]);
-                formData.append('submit',$('#submit').val());
-                // formData.delete('cpassword');
-
-                // for( var [key,value] of formData.entries()){
-                //     console.log(key,"=>",value)
-                // }
+                formData.append('submit', $('#submit').val());
+                formData.delete('cpassword'); 
+                for( var [key,value] of formData.entries()){
+                    console.log(key,"=>",value)
+                }
                 $.ajax({
                     type:"POST",
                     url:'action/product_form.php',
@@ -73,8 +73,9 @@
                         $("#response").html(res.data);
                     }
                 })
+
             })
-        })
+        });
     </script>
 </body>
 </html>
